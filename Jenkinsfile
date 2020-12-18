@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Hello GitHub') {
             steps {
-                echo "Hello GitHub!"
+                echo "Hello GHPRB!"
             }
         }
         stage('Compile') {
