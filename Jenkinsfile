@@ -1,18 +1,11 @@
 pipeline {
     agent {
-        dockerfile {
+        docker {
             label 'docker'
+            image 'python:3'
         }
-    }
-    parameters {
-        string(name: 'REF', defaultValue: '\${gitlabBranch}', description: 'Commit to build')
     }
     stages {
-        stage('Hello GitHub') {
-            steps {
-                echo "Hello GitHub!"
-            }
-        }
         stage('Compile') {
             steps {
                 sh 'python3 -m compileall adder.py'
@@ -25,14 +18,8 @@ pipeline {
         }
         stage('Unit test') {
             steps {
-                sh 'python3 -m pytest -v --junitxml=junit.xml --cov-report xml --cov adder adder.py'
+                sh 'python3 -m unittest adder.py'
             }
-        }
-    }
-    post {
-        always {
-            junit 'junit.xml'
-            cobertura coberturaReportFile: 'coverage.xml'
         }
     }
 }
