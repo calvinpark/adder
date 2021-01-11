@@ -1,8 +1,7 @@
 pipeline {
     agent {
-        docker {
+        dockerfile {
             label 'docker'
-            image 'python:3'
         }
     }
     stages {
@@ -28,5 +27,4 @@ pipeline {
             cobertura coberturaReportFile: 'coverage.xml'
         }
     }
-
 }
