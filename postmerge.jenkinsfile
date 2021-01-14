@@ -1,12 +1,30 @@
 pipeline {
     agent none
-
+    options {
+        // This is required if you want to clean before build
+        skipDefaultCheckout(true)
+    }
+    stages {
+        stage('Clean & Clone') {
+            agent {
+                label 'linux'
+                reuseNode true
+            }
+            steps {
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                checkout scm
+            }
+        }
+    }
     stages {
         stage('Get next version') {
             agent {
                 dockerfile {
                     label 'docker'
                     filename 'git.dockerfile'
+                    reuseNode true
                 }
             }
             steps {
@@ -19,7 +37,10 @@ pipeline {
             }
         }
         stage('Get Docker group') {
-            agent { label 'firewalled-agent' }
+            agent { 
+                label 'firewalled-agent' 
+                reuseNode true
+            }
             steps {
                 script {
                     docker_group = sh (
@@ -35,6 +56,7 @@ pipeline {
                     label 'firewalled-agent'
                     filename 'package.dockerfile'
                     args "-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}"
+                    reuseNode true
                 }
             }
             steps {
@@ -44,7 +66,10 @@ pipeline {
             }
         }
         stage('Push git tag') {
-            agent { label 'docker' }
+            agent {
+                label 'docker' 
+                reuseNode true
+            }
             steps {
                 script {
                     container = docker.build("git", "-f git.dockerfile")
@@ -52,13 +77,6 @@ pipeline {
                         sh "git push ${version}"
                     }
                 }
-            }
-        }
-    }
-    post {
-        cleanup {
-            node('linux') {
-                cleanWs()
             }
         }
     }
