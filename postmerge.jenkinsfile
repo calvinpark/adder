@@ -19,17 +19,20 @@ pipeline {
             }
         }
         stage('Package, Test, & Deliver') {
-            agent {
-                dockerfile {
-                    label 'docker'
-                    filename 'package.dockerfile'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add $(stat -c \'%g\' /var/run/docker.sock)'
-                }
-            }
+            agent { label 'docker' }
             steps {
-                sh "sh package.sh ${version}"
-                sh "sh integration-test.sh ${version}"
-                sh "docker push calvinpark/adder:${version}"
+                script {
+                    docker_group = sh (
+                        script: "stat -c '%g' /var/run/docker.sock"
+                        returnStdout: true
+                    ).trim()
+                    container = docker.build("dood", "-f package.dockerfile")
+                    container.inside("-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}") {
+                        sh "sh package.sh ${version}"
+                        sh "sh integration-test.sh ${version}"
+                        sh "docker push calvinpark/adder:${version}"
+                    }
+                }
             }
         }
         stage('Push git tag') {
