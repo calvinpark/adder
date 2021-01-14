@@ -6,7 +6,7 @@ pipeline {
             agent {
                 docker {
                     label 'docker'
-                    image 'alpine:git'
+                    image 'alpine/git:v2.26.2'
                 }
             }
             steps {
@@ -47,7 +47,7 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    docker.image('alpine:git').inside {
+                    docker.image('alpine/git:v2.26.2').inside {
                         sh "git push ${version}"
                     }
                 }
