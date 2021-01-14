@@ -4,16 +4,15 @@ pipeline {
     stages {
         stage('Get next version') {
             agent {
-                docker {
+                dockerfile {
                     label 'docker'
-                    image 'alpine/git:v2.26.2'
-                    args '--entrypoint=""'
+                    filename 'git.dockerfile'
                 }
             }
             steps {
                 script {
                     version = sh (
-                        script: './get-next-version.sh',
+                        script: 'sh get-next-version.sh',
                         returnStdout: true
                     ).trim()
                 }
@@ -48,7 +47,8 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    docker.image('alpine/git:v2.26.2').inside {
+                    container = docker.build("git", "-f git.dockerfile .")
+                    container.inside {
                         sh "git push ${version}"
                     }
                 }
