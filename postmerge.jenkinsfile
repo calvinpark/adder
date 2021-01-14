@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 sh "sh package.sh ${version}"
-                sh "sh integration-test.sh ${version}"
+                sh "sh integration-test.sh 3 8 11 ${version}"
                 sh "docker push calvinpark/adder:${version}"
             }
         }
@@ -53,6 +53,11 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+    post {
+        cleanup {
+            cleanWs()
         }
     }
 }
