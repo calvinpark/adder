@@ -39,7 +39,7 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    container = docker.build("git", "-f git.dockerfile")
+                    container = docker.build("git", "-f git.dockerfile .")
                     container.inside {
                         sh "git push ${version}"
                     }
