@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        DOCKER = credential('dockerhub-calvinpark')
+        DOCKER = credentials('dockerhub-calvinpark')
     }
     stages {
         stage('Get next version') {
