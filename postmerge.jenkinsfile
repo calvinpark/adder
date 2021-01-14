@@ -18,7 +18,7 @@ pipeline {
                         script: 'sh get-next-version.sh',
                         returnStdout: true
                     ).trim()
-                    echo 'Next versino is $version'
+                    echo "Next version is ${version}"
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
                 dockerfile {
                     label 'firewalled-agent'
                     filename 'package.dockerfile'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add $docker_group'
+                    args "-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}"
                 }
             }
             steps {
