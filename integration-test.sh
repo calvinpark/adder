@@ -8,7 +8,7 @@ VERSION=${4:-latest}
 
 SUM=$(docker run calvinpark/adder:${VERSION} python3 adder.py ${FIRST} ${SECOND})
 
-if [[ ${SUM} == "${ANSWER}" ]]; then
+if [ ${SUM} == "${ANSWER}" ]; then
     echo "Integration test success"
 else
     echo "[ERROR] ${FIRST} + ${SECOND} returned ${SUM}, not ${ANSWER}" >&2
