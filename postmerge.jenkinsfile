@@ -21,10 +21,12 @@ pipeline {
         stage('Get Docker group') {
             agent { label 'firewalled-agent' }
             steps {
-                docker_group = sh (
-                    "stat -c '%g' /var/run/docker.sock",
-                    returnStdout: true
-                )
+                script {
+                    docker_group = sh (
+                        "stat -c '%g' /var/run/docker.sock",
+                        returnStdout: true
+                    )
+                }
             }
         }
         stage('Package, Test, & Deliver') {
