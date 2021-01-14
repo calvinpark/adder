@@ -56,7 +56,10 @@ pipeline {
     }
     post {
         cleanup {
-            cleanWs disableDeferredWipeout: true, deleteDirs: true
+            cleanWs(patterns: [
+                [pattern: '*', type: 'INCLUDE'],
+                [pattern: '.*', type: 'INCLUDE']
+            ])
         }
     }
 }
