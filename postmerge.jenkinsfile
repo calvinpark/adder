@@ -59,9 +59,15 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    container = docker.build("git", "-f git.dockerfile .")
-                    container.inside {
-                        sh "git push origin ${version}"
+                    try {
+                        container = docker.build("git", "-f git.dockerfile .")
+                        container.inside {
+                            sh "git tag ${version}"
+                            sh "git push origin ${version}"
+                        }
+                    } catch (Exception e) {
+                        sh "git tag -d ${version} || true"
+                        throw e
                     }
                 }
             }
