@@ -14,7 +14,7 @@ pipeline {
                     version = sh (
                         script: 'git semver minor',
                         returnStdout: true
-                    ).trim())
+                    ).trim()
                 }
             }
         }
