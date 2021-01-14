@@ -1,5 +1,6 @@
 pipeline {
-    agent { label 'linux' }
+    agent none
+
     stages {
         stage('Get next version') {
             agent {
@@ -56,10 +57,9 @@ pipeline {
     }
     post {
         cleanup {
-            cleanWs(patterns: [
-                [pattern: '*', type: 'INCLUDE'],
-                [pattern: '.*', type: 'INCLUDE']
-            ])
+            node('linux') {
+                cleanWs()
+            }
         }
     }
 }
