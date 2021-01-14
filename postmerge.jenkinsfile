@@ -1,0 +1,47 @@
+pipeline {
+    agent none
+
+    stages {
+        stage('Get next version') {
+            agent {
+                dockerfile {
+                    label 'docker'
+                    filename 'git.dockerfile'
+                }
+            }
+            steps {
+                script {
+                    version = sh (
+                        script: 'git semver minor',
+                        returnStdout: true
+                    ).trim())
+                }
+            }
+        }
+        stage('Package, Test, & Deliver') {
+            agent {
+                dockerfile {
+                    label 'docker'
+                    filename 'package.dockerfile'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add $(stat -c '%g' /var/run/docker.sock)'
+                }
+            }
+            steps {
+                sh "sh package.sh ${version}"
+                sh "sh integration-test.sh ${version}"
+                sh "docker push calvinpark/adder:${version}"
+            }
+        }
+        stage('Push git tag') {
+            agent { label 'docker' }
+            steps {
+                script {
+                    container = docker.build("git", "-f git.dockerfile")
+                    container.inside {
+                        sh "git push ${version}")
+                    }
+                }
+            }
+        }
+    }
+}
