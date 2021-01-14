@@ -18,6 +18,7 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     echo "Next version is ${version}"
+                    sh "echo -n ${version} > version"
                 }
             }
         }
@@ -41,16 +42,17 @@ pipeline {
                 }
             }
             steps {
-                sh """
-                    ./package.sh ${version}
-                    ./integration-test.sh 3 8 11 ${version}
-                """
                 sh '''
+                    export version=$(cat version)
+
+                    ./package.sh \${version}
+                    ./integration-test.sh 3 8 11 ${version}
+
                     echo ${DOCKER_PSW} > docker-password
                     export HOME=${WORKSPACE}
                     cat docker-password | docker login --username ${DOCKER_USR} --password-stdin
+                    docker push calvinpark/adder:${env.version}
                 '''
-                sh "docker push calvinpark/adder:${version}"
             }
         }
         stage('Push git tag') {
