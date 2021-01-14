@@ -6,7 +6,7 @@ SECOND=$2
 ANSWER=$3
 VERSION=${4:-latest}
 
-SUM=$(docker run calvinpark/adder:${VERSION} ${FIRST} ${SECOND})
+SUM=$(docker run calvinpark/adder:${VERSION} python3 adder.py ${FIRST} ${SECOND})
 
 if [[ ${SUM} == "${ANSWER}" ]]; then
     echo "Integration test success"
