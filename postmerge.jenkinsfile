@@ -23,7 +23,7 @@ pipeline {
                 dockerfile {
                     label 'docker'
                     filename 'package.dockerfile'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add $(stat -c '%g' /var/run/docker.sock)'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add $(stat -c \'%g\' /var/run/docker.sock)'
                 }
             }
             steps {
