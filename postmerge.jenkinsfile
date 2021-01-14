@@ -51,7 +51,7 @@ pipeline {
                     echo ${DOCKER_PSW} > docker-password
                     export HOME=${WORKSPACE}
                     cat docker-password | docker login --username ${DOCKER_USR} --password-stdin
-                    docker push calvinpark/adder:${env.version}
+                    docker push calvinpark/adder:${version}
                 '''
             }
         }
