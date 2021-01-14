@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker_group = sh (
-                        script: "stat -c '%g' /var/run/docker.sock"
+                        script: "stat -c '%g' /var/run/docker.sock",
                         returnStdout: true
                     ).trim()
                     container = docker.build("dood", "-f package.dockerfile")
