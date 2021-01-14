@@ -18,28 +18,34 @@ pipeline {
                 }
             }
         }
-        stage('Package, Test, & Deliver') {
-            agent { label 'docker' }
+        stage('Get Docker group') {
+            agent { label 'firewalled-agent' }
             steps {
-                script {
-                    docker_group = sh (
-                        script: "stat -c '%g' /var/run/docker.sock",
-                        returnStdout: true
-                    ).trim()
-                    container = docker.build("dood", "-f package.dockerfile .")
-                    container.inside("-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}") {
-                        sh "sh package.sh ${version}"
-                        sh "sh integration-test.sh ${version}"
-                        sh "docker push calvinpark/adder:${version}"
-                    }
+                docker_group = sh (
+                    "stat -c '%g' /var/run/docker.sock",
+                    returnStdout: true
+                )
+            }
+        }
+        stage('Package, Test, & Deliver') {
+            agent {
+                dockerfile {
+                    label 'firewalled-agent'
+                    filename 'package.dockerfile'
+                    args "-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}"
                 }
+            }
+            steps {
+                sh "sh package.sh ${version}"
+                sh "sh integration-test.sh ${version}"
+                sh "docker push calvinpark/adder:${version}"
             }
         }
         stage('Push git tag') {
             agent { label 'docker' }
             steps {
                 script {
-                    container = docker.build("git", "-f git.dockerfile .")
+                    container = docker.build("git", "-f git.dockerfile")
                     container.inside {
                         sh "git push ${version}"
                     }
