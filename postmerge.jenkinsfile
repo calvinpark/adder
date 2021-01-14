@@ -44,7 +44,10 @@ pipeline {
                 sh "./package.sh ${version}"
                 sh "./integration-test.sh 3 8 11 ${version}"
 
-                sh 'echo $DOCKER_PSW > docker.password'
+                sh "mkdir ${HOME}/.docker"
+                sh 'echo "{ \"Username\": \"$DOCKER_USR\"," > ${HOME}/.docker/config.json'
+                sh 'echo "  \"Secret\": \"$DOCKER_PSW\"}" >> ${HOME}/.docker/config.json'
+
                 sh 'cat docker.password | docker login --username $DOCKER_USR --password-stdin'
                 sh "docker push calvinpark/adder:${version}"
             }
