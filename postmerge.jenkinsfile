@@ -1,6 +1,7 @@
 pipeline {
     agent none
     environment {
+        HOME = WORKSPACE
         DOCKER = credentials('dockerhub-calvinpark')
     }
     stages {
@@ -43,8 +44,8 @@ pipeline {
                 sh "./package.sh ${version}"
                 sh "./integration-test.sh 3 8 11 ${version}"
 
-                sh "echo ${DOCKER_PSW} > docker.password"
-                sh "cat docker.password | docker login --username ${DOCKER_USR} --password-stdin"
+                sh 'echo $DOCKER_PSW > docker.password'
+                sh 'cat docker.password | docker login --username $DOCKER_USR --password-stdin'
                 sh "docker push calvinpark/adder:${version}"
             }
         }
