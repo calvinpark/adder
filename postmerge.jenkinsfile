@@ -1,7 +1,6 @@
 pipeline {
     agent none
     environment {
-        HOME = "${WORKSPACE}"
         DOCKER = credentials('dockerhub-calvinpark')
     }
     stages {
@@ -57,7 +56,7 @@ pipeline {
                 script {
                     container = docker.build("git", "-f git.dockerfile .")
                     container.inside {
-                        sh "git push ${version}"
+                        sh "git push origin ${version}"
                     }
                 }
             }
