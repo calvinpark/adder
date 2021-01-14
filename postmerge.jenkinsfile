@@ -38,7 +38,7 @@ pipeline {
                 script {
                     container = docker.build("git", "-f git.dockerfile")
                     container.inside {
-                        sh "git push ${version}")
+                        sh "git push ${version}"
                     }
                 }
             }
