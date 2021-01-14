@@ -1,6 +1,5 @@
 pipeline {
     agent { label 'linux' }
-
     stages {
         stage('Get next version') {
             agent {
@@ -57,7 +56,7 @@ pipeline {
     }
     post {
         cleanup {
-            cleanWs()
+            cleanWs disableDeferredWipeout: true, deleteDirs: true
         }
     }
 }
