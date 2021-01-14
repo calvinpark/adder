@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        HOME = WORKSPACE
+        HOME = "${WORKSPACE}"
         DOCKER = credentials('dockerhub-calvinpark')
     }
     stages {
