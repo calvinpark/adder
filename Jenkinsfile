@@ -18,6 +18,10 @@ pipeline {
                     -v --junitxml=junit.xml \
                     --cov-report xml --cov adder adder.py \
                 '''
+        }   }
+        stage('Hello GitHub') {
+            steps {
+                echo "Hello GitHub!"
     }   }   }
     post {
         always {
