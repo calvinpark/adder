@@ -37,7 +37,7 @@ pipeline {
             agent {
                 dockerfile {
                     label 'firewalled-firewalled-agent'
-                    filename 'package.dockerfile'
+                    filename 'cd-env.dockerfile'
                     args "-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}"
                 }
             }
