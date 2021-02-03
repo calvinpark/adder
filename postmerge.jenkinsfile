@@ -84,7 +84,7 @@ pipeline {
     post {
         success {
             script {
-                currentBuild.displayName = version
+                currentBuild.description = version
             }
         }
     }
