@@ -26,7 +26,7 @@ pipeline {
             }
         }
         stage('Get Docker group') {
-            agent { label 'firewalled-firewalled-agent' }
+            agent { label 'aws-aws-agent' }
             steps {
                 script {
                     docker_group = sh (
@@ -39,7 +39,7 @@ pipeline {
         stage('Package, Test, & Deliver') {
             agent {
                 dockerfile {
-                    label 'firewalled-firewalled-agent'
+                    label 'aws-aws-agent'
                     filename 'cd-env.dockerfile'
                     args "-v /var/run/docker.sock:/var/run/docker.sock:rw --group-add ${docker_group}"
                 }
