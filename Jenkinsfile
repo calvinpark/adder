@@ -30,4 +30,13 @@ pipeline {
         always {
             junit 'junit.xml'
             cobertura coberturaReportFile: 'coverage.xml'
+            if (env.CHANGE_ID) {
+                publishCoverageGithub(
+                    filepath:'coverage.xml',
+                    coverageXmlType: 'cobertura',
+                    comparisonOption: [
+                        value: 'optionFixedCoverage',
+                        fixedCoverage: '0.65' ],
+                    coverageRateType: 'Line')
+            }
 }   }   }
