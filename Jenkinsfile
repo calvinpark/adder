@@ -3,9 +3,9 @@ pipeline {
         dockerfile {
             label 'docker'
     }   }
-    parameters {
-        string(name: 'GITREF', defaultValue: '\${ghprbActualCommit}', description: 'Commit to build')
-    }
+    // parameters {
+    //     string(name: 'GITREF', defaultValue: '\${ghprbActualCommit}', description: 'Commit to build')
+    // }
     stages {
         stage('Compile') {
             steps {
