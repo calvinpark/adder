@@ -4,7 +4,7 @@ pipeline {
             label 'docker'
     }   }
     parameters {
-        string(name: 'REF', defaultValue: '\${ghprbActualCommit}', description: 'Commit to build')
+        string(name: 'GITREF', defaultValue: '\${ghprbActualCommit}', description: 'Commit to build')
     }
     stages {
         stage('Compile') {
