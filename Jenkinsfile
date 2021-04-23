@@ -30,4 +30,15 @@ pipeline {
         always {
             junit 'junit.xml'
             cobertura coberturaReportFile: 'coverage.xml'
+            script {
+                if (env.ghprbActualCommit) {
+                    publishCoverageGithub(
+                        filepath:'coverage.xml',
+                        coverageXmlType: 'cobertura',
+                        comparisonOption: [
+                            value: 'optionFixedCoverage',
+                            fixedCoverage: '0.65' ],
+                        coverageRateType: 'Line')
+                }
+            }
 }   }   }
