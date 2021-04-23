@@ -31,7 +31,7 @@ pipeline {
             junit 'junit.xml'
             cobertura coberturaReportFile: 'coverage.xml'
             script {
-                if (env.CHANGE_ID) {
+                if (env.ghprbActualCommit) {
                     publishCoverageGithub(
                         filepath:'coverage.xml',
                         coverageXmlType: 'cobertura',
