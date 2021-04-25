@@ -1,0 +1,25 @@
+@Library('my-folder-shared-lib') _
+
+pipeline {
+    agent any
+    stages {
+        stage('Access vars') { steps {
+            hello-shared-libs()
+        } }
+        stage('Access src test 1') { steps {
+            script {
+                try {
+                    import src.ca.lvin.books.Greeter
+                    Greeter g = new Greeter('Name 1')
+                    g.greet()
+                } catch (Exception e) {
+                    println("Access src test 1 failed! ${e.toString()}")
+        } } } }
+        stage('Access resources test 1') { steps {
+            script {
+                try {
+                    String name = libraryResource name.txt
+                    print("The name is ${name}")
+                } catch (Exception e) {
+                    println("Access resources test 1 failed! ${e.toString()}")
+}   }   } } } }
