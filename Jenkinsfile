@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Hello GitHub') {
             steps {
-                echo "Hello GitHub!"
+                echo "Hello GitHub Merge PR!"
             }
         }
         stage('Compile') {
