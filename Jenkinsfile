@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        dockerfile {
-            label 'docker'
-        }
-    }
+    agent any
     parameters {
         string(name: 'REF', defaultValue: '\${ghprbActualCommit}', description: 'Commit to build')
     }
